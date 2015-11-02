@@ -3,7 +3,7 @@ import Graphics.Element exposing (show)
 
 
 type Animal = Cat | Dog
-type Fish = Fish
+type Fish = Fish (Maybe Int)
 
 myCat =
     Cat
@@ -18,11 +18,23 @@ isMyCatReallyADog =
         _ -> "IDK what he is."
 
 myDogCatIsNowAFish =
-    Meta.switchType myCatIsADog Fish
+    Meta.switchType myCatIsADog (Fish (Just 1))
 
 isMyDogCatReallyAFish =
     case myDogCatIsNowAFish of
-        Fish -> "Yup, fishy!"
+        Fish _ -> "Yup, fishy!"
         _ -> "Nope, something else"
 
-main = show <| isMyDogCatReallyAFish
+age =
+    Just 5
+
+newAge =
+    Meta.fmap (\x -> x + 1) age
+
+type Age = Years Int | Days Int
+
+newNewAge =
+    Meta.fmap (\x -> x + 5) <| Years 5
+
+
+main = show <| newNewAge

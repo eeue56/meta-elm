@@ -9,3 +9,7 @@ nameOf =
 switchType : a -> b -> b
 switchType =
     Native.Meta.switchType
+
+fmap : a -> b -> b
+fmap =
+    Native.Meta.fmap
