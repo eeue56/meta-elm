@@ -56,7 +56,7 @@ isMyDogCatReallyAFish =
 
 ```
 
-Use getters for self-referential properies
+Use getters for self-referential properties
 
 ```elm
 
