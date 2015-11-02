@@ -15,7 +15,10 @@ fmap =
     Native.Meta.fmap
 
 
---getter : (a -> b) -> String -> a
+type Getter a =
+    Getter a
+
+
 -- we have to abuse the type system a bit here..
 -- not really very fond of it
 -- but in order to get it to compile,
@@ -24,5 +27,6 @@ fmap =
 -- it's possible to override this implementation
 -- within your own modules and provide a type signature to
 -- back up the compile system
-getter =
-    Native.Meta.getter
+getter : (a -> b) -> Getter b -> a -> a
+getter f g record =
+    Native.Meta.getter f g record

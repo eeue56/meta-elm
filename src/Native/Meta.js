@@ -7,8 +7,7 @@ Elm.Native.Meta.make = function(localRuntime) {
         return localRuntime.Native.Meta.values;
     }
 
-    $Native$Show = Elm.Native.Show.make(localRuntime);
-    var _toString = $Native$Show.toString;
+    $Native$Debug = Elm.Native.Debug.make(localRuntime)
 
 
     var nameOf = function nameOf(obj){
@@ -17,7 +16,6 @@ Elm.Native.Meta.make = function(localRuntime) {
 
     var switchType = function switchType(_left, right){
         var left = _left;
-        console.log(left, right);
         left.ctor = right.ctor;
         return left;
     };
@@ -37,8 +35,28 @@ Elm.Native.Meta.make = function(localRuntime) {
         return _left;
     };
 
-    var getter = function getter(f, name, left){
-        console.log("name is", name);
+    var getter = function getter(f, getter, left){
+        console.log("f", f);
+        console.log("name", name);
+        console.log("left", left);
+
+        var keys = Object.keys(left);
+        var name = null;
+
+        for (var i = 0; i < keys.length; i++){
+            if (left[keys[i]] === getter){
+                name = keys[i];
+                break;
+            }
+        }
+
+        if (name === null){
+            $Native$Debug.crash("Name not found in record!");
+        }
+
+        if (typeof left !== "object" || typeof left.ctor !== "undefined" ){
+            $Native$Debug.crash("Only records can have setters!");
+        }
         Object.defineProperty(
             left,
             name,
