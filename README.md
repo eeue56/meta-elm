@@ -55,3 +55,33 @@ isMyDogCatReallyAFish =
         _ -> "Nope, something else"
 
 ```
+
+Use getters for self-referential properies
+
+```elm
+
+type alias Person = {
+    age : Int,
+    name : String,
+    realAge : Int,
+    actualAge : Int
+}
+
+me = {
+    name = "Dave",
+    age = 12,
+    realAge = 21,
+    actualAge = -1 }
+
+-- create a getter on the me object
+me' =
+    Meta.getter
+        (\me -> if me.age < 20 then me.realAge else me.age)
+        "actualAge"
+        me
+
+-- equal to 21
+myAge =
+    me'.actualAge
+
+```
