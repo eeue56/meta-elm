@@ -38,7 +38,7 @@ Elm.Native.Meta.make = function(localRuntime) {
     };
 
     var getter = function getter(f, name, left){
-        console.log(f, name, left);
+        console.log("name is", name);
         Object.defineProperty(
             left,
             name,

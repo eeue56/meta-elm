@@ -16,5 +16,13 @@ fmap =
 
 
 --getter : (a -> b) -> String -> a
+-- we have to abuse the type system a bit here..
+-- not really very fond of it
+-- but in order to get it to compile,
+-- we have to refuse to acknowledge the record
+-- type that we're passing in, as otherwise it blows up
+-- it's possible to override this implementation
+-- within your own modules and provide a type signature to
+-- back up the compile system
 getter =
     Native.Meta.getter
