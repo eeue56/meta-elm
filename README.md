@@ -64,20 +64,21 @@ type alias Person = {
     age : Int,
     name : String,
     realAge : Int,
-    actualAge : Int
+    actualAge : Meta.Getter Int
 }
 
+-- need to provide a default value for the getter
 me = {
     name = "Dave",
     age = 12,
     realAge = 21,
-    actualAge = -1 }
+    actualAge = Meta.Getter -1 }
 
 -- create a getter on the me object
 me' =
     Meta.getter
         (\me -> if me.age < 20 then me.realAge else me.age)
-        "actualAge"
+        me.actualAge
         me
 
 -- equal to 21
