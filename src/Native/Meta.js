@@ -16,7 +16,8 @@ Elm.Native.Meta.make = function(localRuntime) {
     };
 
     var switchType = function switchType(_left, right){
-        var left = Object.freeze(_left);
+        var left = _left;
+        console.log(left, right);
         left.ctor = right.ctor;
         return left;
     };
@@ -36,10 +37,23 @@ Elm.Native.Meta.make = function(localRuntime) {
         return _left;
     };
 
+    var getter = function getter(f, name, left){
+        console.log(f, name, left);
+        Object.defineProperty(
+            left,
+            name,
+            { get : function() {
+                return f(this);
+            }}
+        );
+
+        return left;
+    };
 
     return Elm.Native.Meta.values = {
         nameOf: nameOf,
         switchType: F2(switchType),
-        fmap: F2(fmap)
+        fmap: F2(fmap),
+        getter: F3(getter)
     };
 };

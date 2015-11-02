@@ -37,4 +37,29 @@ newNewAge =
     Meta.fmap (\x -> x + 5) <| Years 5
 
 
-main = show <| newNewAge
+type alias Person = {
+    age : Int,
+    name : String,
+    realAge : Int,
+    actualAge : Int
+}
+
+me = {
+    name = "Dave",
+    age = 12,
+    realAge = 21,
+    actualAge = -1 }
+
+me' =
+    Meta.getter
+        (\me -> if me.age < 20 then me.realAge else me.age)
+        "actualAge"
+        me
+
+iAmTwelveAndWhatIsThis =
+    Meta.switchType me me
+
+iAmTwelveAndWhatIsMyAgeAgain =
+    me'.actualAge
+
+main = show <| iAmTwelveAndWhatIsThis

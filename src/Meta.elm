@@ -13,3 +13,8 @@ switchType =
 fmap : a -> b -> b
 fmap =
     Native.Meta.fmap
+
+
+--getter : (a -> b) -> String -> a
+getter =
+    Native.Meta.getter
