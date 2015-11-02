@@ -36,9 +36,9 @@ Elm.Native.Meta.make = function(localRuntime) {
     };
 
     var getter = function getter(f, getter, left){
-        console.log("f", f);
-        console.log("name", name);
-        console.log("left", left);
+        if (typeof left !== "object" || typeof left.ctor !== "undefined" ){
+            $Native$Debug.crash("Only records can have setters!");
+        }
 
         var keys = Object.keys(left);
         var name = null;
@@ -50,13 +50,12 @@ Elm.Native.Meta.make = function(localRuntime) {
             }
         }
 
+        // this should be impossible, but better make sure
         if (name === null){
             $Native$Debug.crash("Name not found in record!");
         }
 
-        if (typeof left !== "object" || typeof left.ctor !== "undefined" ){
-            $Native$Debug.crash("Only records can have setters!");
-        }
+
         Object.defineProperty(
             left,
             name,
@@ -68,10 +67,15 @@ Elm.Native.Meta.make = function(localRuntime) {
         return left;
     };
 
+    var createGetter = function(f){
+        console.log(f);
+    };
+
     return Elm.Native.Meta.values = {
         nameOf: nameOf,
         switchType: F2(switchType),
         fmap: F2(fmap),
-        getter: F3(getter)
+        getter: F3(getter),
+        createGetter: createGetter
     };
 };

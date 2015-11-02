@@ -48,7 +48,7 @@ me = {
     name = "Dave",
     age = 12,
     realAge = 21,
-    actualAge = Meta.Getter -1 }
+    actualAge = Meta.Getter 0 }
 
 me' =
     Meta.getter
@@ -61,6 +61,5 @@ iAmTwelveAndWhatIsThis =
 
 iAmTwelveAndWhatIsMyAgeAgain =
     me'.actualAge
-
 
 main = show <| iAmTwelveAndWhatIsMyAgeAgain
