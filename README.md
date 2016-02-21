@@ -1,6 +1,6 @@
 # meta-elm
 
-Welcome to meta-elm! In here, we will look at examples of how to abuse Elm to make it work for meta-programming.
+Welcome to meta-elm! In here, we will look at examples of how to abuse Elm to make it work for meta-programming. Note the word _abuse_. Don't do any of this for anything other than research or experiments!
 
 For example, a implementation of fmap:
 
