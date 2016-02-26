@@ -1,6 +1,6 @@
 # meta-elm
 
-Welcome to meta-elm! In here, we will look at examples of how to abuse Elm to make it work for meta-programming.
+Welcome to meta-elm! In here, we will look at examples of how to abuse Elm to make it work for meta-programming. Note the word _abuse_. Don't do any of this for anything other than research or experiments!
 
 While some of these implementations are type-safe and correct, others are not. This means that it's not a good thing to add to any production Elm-based systems, as it removes one of the major benefits of having a static strongly-typed language.
 
