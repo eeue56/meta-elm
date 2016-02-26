@@ -1,5 +1,8 @@
 module Meta where
 
+import Json.Encode exposing (string)
+import VirtualDom exposing (Node, property)
+
 import Native.Meta
 
 nameOf : a -> String
@@ -13,6 +16,12 @@ switchType =
 fmap : a -> b -> b
 fmap =
     Native.Meta.fmap
+
+
+allPossibleActions : (a -> b) -> List a
+allPossibleActions =
+    Native.Meta.allPossibleActions
+
 
 
 type Getter a =
@@ -30,3 +39,16 @@ type Getter a =
 getter : (a -> b) -> Getter b -> a -> a
 getter f g record =
     Native.Meta.getter f g record
+
+
+style : String -> VirtualDom.Node
+style text =
+    VirtualDom.node
+        "style"
+        [ property "textContent" <| string text
+        , property "type" <| string "text/css" ]
+        []
+
+banana : a -> a
+banana =
+    Native.Meta.banana

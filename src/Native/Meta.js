@@ -7,7 +7,8 @@ Elm.Native.Meta.make = function(localRuntime) {
         return localRuntime.Native.Meta.values;
     }
 
-    $Native$Debug = Elm.Native.Debug.make(localRuntime)
+    $Native$Debug = Elm.Native.Debug.make(localRuntime);
+    $Elm$List = Elm.Native.List.make(localRuntime);
 
 
     var nameOf = function nameOf(obj){
@@ -60,6 +61,7 @@ Elm.Native.Meta.make = function(localRuntime) {
             left,
             name,
             { get : function() {
+                console.log("this", this);
                 return f(this);
             }}
         );
@@ -71,11 +73,40 @@ Elm.Native.Meta.make = function(localRuntime) {
         console.log(f);
     };
 
+    var banana = function(a){
+        console.log(a);
+        return a;
+    };
+
+    var allPossibleActions = function(f){
+
+        var fas = f.func.toString();
+
+        var patt = /case "(.*)"/g;
+
+        var matches = [];
+        while( (match = patt.exec(fas)) != null ) {
+                matches.push(match[1]);
+        }
+
+
+        var actions = matches.map(function(name){
+            return {
+                'ctor': name
+            };
+        });
+
+        return $Elm$List.fromArray(actions);
+
+    };
+
     return Elm.Native.Meta.values = {
         nameOf: nameOf,
         switchType: F2(switchType),
         fmap: F2(fmap),
         getter: F3(getter),
-        createGetter: createGetter
+        createGetter: createGetter,
+        banana: banana,
+        allPossibleActions: allPossibleActions
     };
 };
