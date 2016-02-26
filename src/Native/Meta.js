@@ -89,12 +89,15 @@ Elm.Native.Meta.make = function(localRuntime) {
                 matches.push(match[1]);
         }
 
-
         var actions = matches.map(function(name){
             return {
                 'ctor': name
             };
         });
+
+        actions.push(
+            { ctor: "Noop" }
+        );
 
         return $Elm$List.fromArray(actions);
 
