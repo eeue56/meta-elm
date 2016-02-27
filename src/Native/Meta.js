@@ -9,6 +9,7 @@ Elm.Native.Meta.make = function(localRuntime) {
 
     $Native$Debug = Elm.Native.Debug.make(localRuntime);
     $Elm$List = Elm.Native.List.make(localRuntime);
+    $Elm$Task = Elm.Native.Task.make(localRuntime);
 
 
     var nameOf = function nameOf(obj){
@@ -103,6 +104,30 @@ Elm.Native.Meta.make = function(localRuntime) {
 
     };
 
+    var waitFor = function(id, loader){
+        var obj = {
+            ctor: 'Waiting',
+        };
+
+        var task = A2($Elm$Task.andThen, loader, function(value){
+            obj.ctor = "Loaded";
+            obj._0 = value;
+
+            console.log("notifying");
+            console.log(localRuntime.inputs);
+            localRuntime.notify(localRuntime.inputs[0].id, localRuntime.inputs[0].value);
+            return $Elm$Task.succeed(value);
+        });
+
+        obj.task = task;
+
+        return obj;
+    };
+
+    var triggerLoad = function(item){
+        $Elm$Task.perform(item.task);
+    };
+
     return Elm.Native.Meta.values = {
         nameOf: nameOf,
         switchType: F2(switchType),
@@ -110,6 +135,8 @@ Elm.Native.Meta.make = function(localRuntime) {
         getter: F3(getter),
         createGetter: createGetter,
         banana: banana,
-        allPossibleActions: allPossibleActions
+        allPossibleActions: allPossibleActions,
+        waitFor: F2(waitFor),
+        triggerLoad: triggerLoad
     };
 };

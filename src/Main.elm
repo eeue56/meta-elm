@@ -1,7 +1,13 @@
-import Meta
+import Meta exposing (..)
 import Graphics.Element exposing (show)
 
+import Task exposing (Task)
+
 import Html exposing (div)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
+import Effects
+import StartApp
 
 type Sausage = Empty | Sausage Int
 
@@ -16,6 +22,10 @@ naught =
     { ctor = "Nothing"
     }
 
+type alias User =
+    { name : String
+    , age : LazyLoad Int
+    }
 
 
 n = Meta.banana <| Sausage 5
@@ -87,16 +97,69 @@ me''' =
     { me'' | age = 31 }
 
 
-type Action = Noop | Run | Robot
+type Action = Noop | Run | Robot | TriggerLoad User
 
 update action model =
     case action of
         Run ->
-            model
+            (model, Effects.none)
         Robot ->
-            model
+            (model, Effects.none)
         Noop ->
-            model
+            (model, Effects.none)
+        TriggerLoad user ->
+            let
+                trigger =
+                    triggerLoad user.age
+                        |> (flip Task.andThen) (\_ -> Task.succeed Noop)
+            in
+            (model, Effects.task trigger)
+
+viewUser : Signal.Address Action -> User -> Html.Html
+viewUser addr user =
+    let
+        extras =
+            case user.age of
+                Waiting ->
+                    [ Html.text " age not loaded yet"]
+                Loaded age ->
+                    [ Html.text <| " and they are " ++ (toString age) ++ " years old" ]
+    in
+        div
+            [ onClick addr (TriggerLoad user)]
+            ([ div [] [Html.text ("Click to load this user\n\n")]
+             , Html.text ("Name: " ++user.name)
+            ] ++ extras)
+
+view : Signal.Address Action -> List User -> Html.Html
+view addr users =
+    div
+        []
+        (List.map (viewUser addr) users)
+
+nf : Int -> Task String Int
+nf n =
+    Task.sleep 1000
+        |> (flip Task.andThen) (\_ -> Task.succeed n)
+
+users =
+    [
+        { name = "noah"
+        , age = create 5 (nf 23)
+        }
+    ,
+        { name = "dave"
+        , age = create 5 (nf 32)
+        }
+    ]
+
+
+app =
+    StartApp.start { init = (users, Effects.none), view = view, update = update, inputs = [] }
 
 main =
-    show <| Meta.allPossibleActions update
+    app.html
+
+port tasks : Signal (Task.Task Effects.Never ())
+port tasks =
+    app.tasks

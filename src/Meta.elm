@@ -1,6 +1,7 @@
 module Meta where
 
 import Json.Encode exposing (string)
+import Task exposing (Task)
 import VirtualDom exposing (Node, property)
 
 import Native.Meta
@@ -17,6 +18,19 @@ fmap : a -> b -> b
 fmap =
     Native.Meta.fmap
 
+
+type LazyLoad a
+    = Loaded a
+    | Waiting
+
+
+create : Int -> Task String a -> LazyLoad a
+create id loader =
+    Native.Meta.waitFor id loader
+
+triggerLoad : LazyLoad a -> b
+triggerLoad =
+    Native.Meta.triggerLoad
 
 allPossibleActions : (a -> b) -> List a
 allPossibleActions =
